@@ -75,7 +75,7 @@ class FormsTests(TestCase):
         post_object = Post.objects.latest('pk')
         self.assertEqual(post_object.text, form_data['text'])
         self.assertEqual(post_object.group, self.group)
-        self.assertEqual(post_object.image, 'posts/small.gif')
+        self.assertEqual(post_object.image, f'posts/{uploaded}')
 
     def test_edit_post_database(self):
         """Изменение поста в базе данных при отправке
@@ -165,7 +165,7 @@ class FormsTests(TestCase):
         )
         self.assertEqual(Comment.objects.count(), comment_count)
 
-    def test_create_post_post_page(self):
+    def test_create_comment(self):
         """После успешной отправки комментарий появляется на странице поста"""
         comment_count = Comment.objects.count()
         form_data = {

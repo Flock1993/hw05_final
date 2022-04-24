@@ -14,7 +14,7 @@ def page_object(post_list, request):
 
 
 def index(request):
-    post_list = Post.objects.order_by('-pub_date')
+    post_list = Post.objects.select_related('group').order_by('-pub_date')
     context = {
         'page_obj': page_object(post_list, request),
     }
@@ -132,12 +132,8 @@ def follow_index(request):
 @login_required
 def profile_follow(request, username):
     author = get_object_or_404(User, username=username)
-    already_following = Follow.objects.filter(
-        user=request.user,
-        author=author,
-    ).exists()
-    if request.user != author and not already_following:
-        Follow.objects.create(
+    if request.user != author:
+        Follow.objects.get_or_create(
             user=request.user,
             author=author,
         )
